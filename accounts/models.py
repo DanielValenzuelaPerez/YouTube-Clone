@@ -6,4 +6,4 @@ class Account(models.Model):
 
 
 class Creator(models.Model):
-    account = models.OneToOneField('Account', models.CASCADE)
+    account = models.OneToOneField('accounts.Account', models.CASCADE)
