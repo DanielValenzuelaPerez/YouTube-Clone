@@ -1,12 +1,16 @@
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from accounts.models import Account
+from django.shortcuts import render
 
-def home_view(request):
-    account = Account.objects.get(id=1)
+from accounts.models import Account
+from accounts.forms import AccountForm
+
+def account_create_view(request):
+    form = AccountForm(request.POST or None)
     context = {
-        'id': account.id,
-        'handle': account.handle
+        'form': form
     }
-    HTML_STRING = render_to_string('home-view.html', context=context)
-    return HttpResponse(HTML_STRING)
+    if form.is_valid():
+        object = form.save()
+        context['form'] = AccountForm()
+    return render(request, 'accounts/create.html', context=context)
