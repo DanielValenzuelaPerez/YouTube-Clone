@@ -1,9 +1,8 @@
+from django.conf import settings
 from django.db import models
 
-
-class Account(models.Model):
-    handle = models.CharField(max_length=20, unique=True)
+User = settings.AUTH_USER_MODEL
 
 
 class Creator(models.Model):
-    account = models.OneToOneField('accounts.Account', models.CASCADE)
+    user = models.OneToOneField(User, models.CASCADE)

@@ -5,10 +5,10 @@ YouTube Home View
 {% endblock title %}
 
 {% block content %}
-<h2>Accounts</h2>
+<h2>Users</h2>
 <ul>
-    {% for account in object_list %}
-    <li>{{ account.id }} - {{ account.handle }}</li>
+    {% for user in object_list %}
+    <li>{{ user.id }} - {{ user.username }}</li>
     {% endfor %}
 </ul>
 {% endblock content %}

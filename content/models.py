@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.db import models
 
+User = settings.AUTH_USER_MODEL
 
 class Content(models.Model):
     video = models.CharField(max_length=255)
@@ -11,7 +13,7 @@ class Content(models.Model):
 
 
 class Playlist(models.Model):
-    user = models.ForeignKey('accounts.Account', models.CASCADE)
+    user = models.OneToOneField(User, models.CASCADE)
     name = models.CharField(max_length=120)
     description = models.TextField(null=True, blank=True)
     creation_date = models.DateField(auto_now_add=True)
