@@ -4,6 +4,12 @@
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
+    {% if request.user.is_authenticated %}
+        <span>Hello, {{ request.user }}. </span>
+        <span><a href="{% url 'logout' %}">Logout</a></span>
+    {% else %}
+        <span><a href="{% url 'login' %}">Login</a></span>
+    {% endif %}
     <p>This text is from the base template.</p>
     {% block content %}{% endblock content %}
 </body>
