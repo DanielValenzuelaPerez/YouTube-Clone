@@ -4,9 +4,9 @@ from django.db import models
 User = settings.AUTH_USER_MODEL
 
 class Subscription(models.Model):
-    user = models.OneToOneField(User, models.CASCADE)
+    user = models.ForeignKey(User, models.CASCADE)
     creator = models.ForeignKey('accounts.Creator', models.CASCADE)
-    date = models.DateField(auto_created=True)
+    date = models.DateField(auto_now=True)
 
     class Meta:
         unique_together = ('user', 'creator')

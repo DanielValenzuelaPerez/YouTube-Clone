@@ -8,7 +8,7 @@ YouTube Home View
 <h2>Users</h2>
 <ul>
     {% for user in object_list %}
-    <li>{{ user.id }} - {{ user.username }}</li>
+    <li>{{ user.id }} - <a href="{% url 'channel' username=user %}">{{ user }}</a></li>
     {% endfor %}
 </ul>
 {% endblock content %}

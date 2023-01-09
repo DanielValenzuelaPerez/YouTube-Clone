@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
 from accounts.models import Creator
+from engagement.models import Subscription
 
 User = get_user_model()
 
@@ -52,11 +53,17 @@ def logoutPage(request):
 def channelPage(request, username=None):
     creator = None
     user = User.objects.filter(username=username).first()
+
+    visiting_user = request.user
+    subscribed = False
     if user:
         creator = Creator.objects.filter(user=user).first()
+        if Subscription.objects.filter(user=visiting_user, creator=creator):
+            subscribed = True
         context = {
             'user': user,
-            'creator': creator
+            'creator': creator,
+            'subscribed': subscribed
         }
         return render(request, 'accounts/channel.html', context=context)
     return redirect('home')
@@ -67,10 +74,27 @@ def become_content_creator(request, username):
         user = User.objects.filter(username=username).first()
         creator = Creator.objects.create(user=user)
         creator.save()
-        print(creator)
         context = {
             'user': user,
             'creator': creator
         }
         return redirect(f"/accounts/channel/{user.username}/", context)
-        # return render(request, 'accounts/channel.html', context=context)
+
+
+def subscribe(request, username):
+    if request.method == 'POST':
+        user = User.objects.filter(username=username).first()
+        creator = Creator.objects.filter(user=user).first()
+        subscriber = User.objects.filter(id=request.user.id).first()
+        print(user)
+        print(creator)
+        print(subscriber)
+        create_subscription, created = Subscription.objects.get_or_create(user=subscriber, creator=creator)
+        if not created:
+            create_subscription.delete()
+        context = {
+            'user': user,
+            'creator': creator,
+            'subsribed': created
+        }
+        return redirect(f"/accounts/channel/{user.username}/", context)
