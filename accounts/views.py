@@ -1,7 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+
+from accounts.models import Creator
+
+User = get_user_model()
+
 
 def registerPage(request):
     if request.user.is_authenticated:
@@ -20,6 +25,7 @@ def registerPage(request):
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
+
 def loginPage(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -37,6 +43,34 @@ def loginPage(request):
     context = {}
     return render(request, 'accounts/login.html', context)
 
+
 def logoutPage(request):
     logout(request)
     return redirect('login')
+
+
+def channelPage(request, username=None):
+    creator = None
+    user = User.objects.filter(username=username).first()
+    if user:
+        creator = Creator.objects.filter(user=user).first()
+        context = {
+            'user': user,
+            'creator': creator
+        }
+        return render(request, 'accounts/channel.html', context=context)
+    return redirect('home')
+
+
+def become_content_creator(request, username):
+    if request.method == 'POST':
+        user = User.objects.filter(username=username).first()
+        creator = Creator.objects.create(user=user)
+        creator.save()
+        print(creator)
+        context = {
+            'user': user,
+            'creator': creator
+        }
+        return redirect(f"/accounts/channel/{user.username}/", context)
+        # return render(request, 'accounts/channel.html', context=context)

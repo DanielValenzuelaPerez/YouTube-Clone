@@ -1,0 +1,10 @@
+<h3>Channel View</h3>
+<p>{{ user }}</p>
+
+{% if request.user == user and not creator %}
+<h4>Become a Content Creator</h4>
+<form action="become_content_creator" method='POST'>
+    {% csrf_token %}
+    <button type="submit">Creator Account</button>
+</form>
+{% endif %}
