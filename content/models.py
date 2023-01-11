@@ -9,14 +9,14 @@ class Content(models.Model):
     views = models.PositiveIntegerField(default=0)
     name = models.CharField(max_length=120)
     description = models.TextField(null=True, blank=True)
-    publish_date = models.DateField(auto_now_add=True)
+    publish_date = models.DateField(auto_now=True)
 
 
 class Playlist(models.Model):
     user = models.OneToOneField(User, models.CASCADE)
     name = models.CharField(max_length=120)
     description = models.TextField(null=True, blank=True)
-    creation_date = models.DateField(auto_now_add=True)
+    creation_date = models.DateField(auto_now=True)
 
 
 class PlaylistContent(models.Model):

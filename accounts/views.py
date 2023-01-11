@@ -86,9 +86,6 @@ def subscribe(request, username):
         user = User.objects.filter(username=username).first()
         creator = Creator.objects.filter(user=user).first()
         subscriber = User.objects.filter(id=request.user.id).first()
-        print(user)
-        print(creator)
-        print(subscriber)
         create_subscription, created = Subscription.objects.get_or_create(user=subscriber, creator=creator)
         if not created:
             create_subscription.delete()

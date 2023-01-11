@@ -15,6 +15,12 @@ YouTube - {{ user }}'s Channel
             {% csrf_token %}
             <button type="submit">Creator Account</button>
         </form>
+    {% else %}
+        <h3>Upload YouTube Video</h3>
+        <button onclick="location.href = '{% url 'upload' %}'">Upload video</button>
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
     {% endif %}
 {% else %}
     <form action="subscribe" method="POST">

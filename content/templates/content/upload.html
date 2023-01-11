@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+YouTube - Upload
+{% endblock title %}
+
+{% block content %}
+<h3>Upload Video</h3>
+
+{{ user }}
+{{ creator }}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+{% endblock content %}
