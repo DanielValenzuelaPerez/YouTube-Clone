@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 
 from accounts.models import Creator
 from engagement.models import Subscription
+from content.models import Content
 
 User = get_user_model()
 
@@ -60,10 +61,12 @@ def channelPage(request, username=None):
         creator = Creator.objects.filter(user=user).first()
         if Subscription.objects.filter(user=visiting_user, creator=creator):
             subscribed = True
+        videos = Content.objects.filter(creator=creator)
         context = {
             'user': user,
             'creator': creator,
-            'subscribed': subscribed
+            'subscribed': subscribed,
+            'videos': videos
         }
         return render(request, 'accounts/channel.html', context=context)
     return redirect('home')

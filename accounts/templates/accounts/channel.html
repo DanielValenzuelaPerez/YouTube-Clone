@@ -8,6 +8,10 @@ YouTube - {{ user }}'s Channel
 <h3>Channel View</h3>
 <p>{{ user }}</p>
 
+{% for message in messages %}
+    <p>{{ message }}</p>
+{% endfor %}
+
 {% if request.user == user%}
     {% if not creator %}
         <h4>Become a Content Creator</h4>
@@ -18,9 +22,7 @@ YouTube - {{ user }}'s Channel
     {% else %}
         <h3>Upload YouTube Video</h3>
         <button onclick="location.href = '{% url 'upload' %}'">Upload video</button>
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
+        <h3>Your Videos</h3>
     {% endif %}
 {% else %}
     <form action="subscribe" method="POST">
@@ -33,5 +35,13 @@ YouTube - {{ user }}'s Channel
             {% endif %}
         {% endif %}
     </form>
+    <h3>Videos</h3>
+{% endif %}
+{% if videos %}
+    {% for video in videos %}
+        <p><a href="{% url 'video' id=video.id %}">{{ video.name }}</a></p>
+    {% endfor %}
+{% else %}
+    <p>This channel does't have content yet.</p>
 {% endif %}
 {% endblock content %}
