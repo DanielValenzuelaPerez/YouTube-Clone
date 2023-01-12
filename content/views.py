@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from accounts.models import Creator
 from content.forms import ContentForm
 from content.models import Content
+from engagement.models import ContentEngagement
 
 User = get_user_model()
 
@@ -40,7 +41,34 @@ def video(request, id):
     except Content.DoesNotExist:
         messages.error(request, f"Video doesn't exist.")
         return redirect(request, 'home')
+    creator = Creator.objects.get(id=video.creator.id)
+    user = User.objects.get(id=creator.user.id)
     context = {
-        'video': video
+        'video': video,
+        'channel': user.username
     }
     return render(request, 'content/video.html', context)
+
+def like(request, id):
+    if request.method == 'POST':
+        video = Content.objects.get(id=id)
+        user = User.objects.get(id=request.user.id)
+        # todo error check for unaunthenticated user
+        creator = Creator.objects.get(id=video.creator.id)
+        channel = User.objects.get(id=creator.user.id).username
+
+        engagement, created = ContentEngagement.objects.get_or_create(content=video, user=user)
+        if created:
+            engagement.liked = True
+        else:
+            if engagement.liked is True:
+                engagement.liked = None
+            else:
+                engagement.liked = True
+        engagement.save()
+        
+        context = {
+            'video': video,
+            'channel': channel
+        }
+        return render(request, 'content/video.html', context)

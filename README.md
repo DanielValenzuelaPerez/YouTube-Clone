@@ -2,7 +2,7 @@
 
 **🚧👷 Project under constructrion 🏗️🚧**
 
-The main goal of this project is to create the basic functionality of the YouTube site. 
+The main goal of this project is to imitate the basic functionality of the YouTube site. 
 
 ## Functional Requirements
 

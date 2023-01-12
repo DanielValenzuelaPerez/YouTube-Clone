@@ -7,7 +7,12 @@ YouTube - {{ video.name }}
 {% block content %}
 <h3>{{ video.name }}</h3>
 <p>[ VIDEO ]</p>
-<p><a href="#">{{ channel }}</a></p>
+<form action="{% url 'like' id=video.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">Like</button>
+    <button type="submit">Disike</button>
+</form>
+<p><a href="{% url 'channel' username=channel %}">{{ channel }}</a></p>
 <p>{{ video.views }} views</p>
 <p>{{ video.description }}</p>
 {% endblock content %}
