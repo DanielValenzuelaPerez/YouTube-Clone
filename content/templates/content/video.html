@@ -19,4 +19,16 @@ YouTube - {{ video.name }}
     <button type="submit">Disike</button>
 </form>
 <p><a href="{% url 'channel' username=channel %}">{{ channel }}</a></p>
+<h4>Comments</h4>
+{% for comment in video.get_comments %}
+    <p>{{ comment.user }}:<br>
+    {{ comment.comment }}<br>
+    <a href="#">reply</a></p>
+{% endfor %}
+<h5>Leave a comment</h5>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Comment</button>
+</form>
 {% endblock content %}

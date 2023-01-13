@@ -23,7 +23,7 @@ class ContentEngagement(models.Model):
 
 class ContentComment(models.Model):
     content = models.ForeignKey('content.Content', models.CASCADE)
-    user = models.OneToOneField(User, models.CASCADE)
+    user = models.ForeignKey(User, models.CASCADE)
     comment = models.TextField()
     reply_to = models.ForeignKey('engagement.ContentComment', models.CASCADE, null=True, blank=True)
-    date_time = models.DateField(auto_created=True)
+    date_time = models.DateField(auto_now=True)

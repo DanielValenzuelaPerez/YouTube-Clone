@@ -5,7 +5,8 @@ from django.shortcuts import render, redirect
 from accounts.models import Creator
 from content.forms import ContentForm
 from content.models import Content
-from engagement.models import ContentEngagement
+from engagement.models import ContentEngagement, ContentComment
+from engagement.forms import ContentCommentForm
 
 User = get_user_model()
 
@@ -43,10 +44,20 @@ def video(request, id):
         return redirect(request, 'home')
     creator = Creator.objects.get(id=video.creator.id)
     user = User.objects.get(id=creator.user.id)
+    form = ContentCommentForm()
     context = {
+        'form': form,
         'video': video,
         'channel': user.username
     }
+    # Comment
+    if request.method == 'POST':
+        form = ContentCommentForm(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.content = video
+            new_comment.user = request.user
+            form.save()
     return render(request, 'content/video.html', context)
 
 def like(request, id):

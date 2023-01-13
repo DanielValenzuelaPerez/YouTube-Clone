@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-from engagement.models import ContentEngagement
+from engagement.models import ContentEngagement, ContentComment
 
 User = settings.AUTH_USER_MODEL
 
@@ -18,6 +18,10 @@ class Content(models.Model):
         liked = engagement.filter(liked=True).count()
         dislikes = engagement.filter(liked=False).count()
         return liked, dislikes
+    
+    def get_comments(self):
+        comments = ContentComment.objects.filter(content=self.pk)
+        return comments
 
 
 class Playlist(models.Model):
