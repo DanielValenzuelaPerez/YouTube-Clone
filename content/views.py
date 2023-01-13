@@ -66,9 +66,34 @@ def like(request, id):
             else:
                 engagement.liked = True
         engagement.save()
+        video.get_likes_dislikes_count()
         
         context = {
             'video': video,
             'channel': channel
         }
-        return render(request, 'content/video.html', context)
+        return redirect(f"/content/video/{id}", context)
+
+def dislike(request, id):
+    if request.method == 'POST':
+        video = Content.objects.get(id=id)
+        user = User.objects.get(id=request.user.id)
+        # todo error check for unaunthenticated user
+        creator = Creator.objects.get(id=video.creator.id)
+        channel = User.objects.get(id=creator.user.id).username
+
+        engagement, created = ContentEngagement.objects.get_or_create(content=video, user=user)
+        if created:
+            engagement.liked = False
+        else:
+            if engagement.liked is False:
+                engagement.liked = None
+            else:
+                engagement.liked = False
+        engagement.save()
+        
+        context = {
+            'video': video,
+            'channel': channel
+        }
+        return redirect(f"/content/video/{id}", context)
