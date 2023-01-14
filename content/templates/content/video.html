@@ -23,7 +23,16 @@ YouTube - {{ video.name }}
 {% for comment in video.get_comments %}
     <p>{{ comment.user }}:<br>
     {{ comment.comment }}<br>
-    <a href="#">reply</a></p>
+    {% for reply in comment.get_replies %}
+        &emsp;{{ reply.user }}:<br>
+        &emsp;{{ reply.comment }}<br>
+    {% endfor %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="reply_to" value="{{ comment.id }}">
+        <button type="submit">Reply</button>
+    </form>
 {% endfor %}
 <h5>Leave a comment</h5>
 <form action="" method="post">

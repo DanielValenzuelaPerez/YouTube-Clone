@@ -20,7 +20,7 @@ class Content(models.Model):
         return liked, dislikes
     
     def get_comments(self):
-        comments = ContentComment.objects.filter(content=self.pk)
+        comments = ContentComment.objects.filter(content=self.pk, reply_to=None)
         return comments
 
 

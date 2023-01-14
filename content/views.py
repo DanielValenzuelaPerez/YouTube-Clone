@@ -57,8 +57,22 @@ def video(request, id):
             new_comment = form.save(commit=False)
             new_comment.content = video
             new_comment.user = request.user
+            new_comment.reply_to = _get_reply_to(request)
             form.save()
     return render(request, 'content/video.html', context)
+
+def _get_reply_to(request):
+    # https://youtu.be/KrGQ2Nrz4Dc
+    parent_obj = None
+    try:
+        parent_id = int(request.POST.get('reply_to'))
+    except:
+        parent_id = None
+    if parent_id:
+        parent_qs = ContentComment.objects.filter(id=parent_id)
+        if parent_qs.exists():
+            parent_obj = parent_qs.first()
+    return parent_obj
 
 def like(request, id):
     if request.method == 'POST':

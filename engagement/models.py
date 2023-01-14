@@ -27,3 +27,7 @@ class ContentComment(models.Model):
     comment = models.TextField()
     reply_to = models.ForeignKey('engagement.ContentComment', models.CASCADE, null=True, blank=True)
     date_time = models.DateField(auto_now=True)
+
+    def get_replies(self):
+        replies = ContentComment.objects.filter(reply_to=self.pk)
+        return replies
