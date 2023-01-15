@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
 from accounts.models import Creator
-from engagement.models import Subscription
+from engagement.models import Subscription, ContentEngagement
 from content.models import Content
 
 User = get_user_model()
@@ -98,3 +98,13 @@ def subscribe(request, username):
             'subsribed': created
         }
         return redirect(f"/accounts/channel/{user.username}/", context)
+
+def likes(request, username):
+    user = User.objects.filter(username=username).first()
+    likes = ContentEngagement.objects.filter(user=user, liked=True).values_list('content', flat=True)
+    videos = Content.objects.filter(id__in=likes)
+    context = {
+        'videos': videos,
+        'username': username
+    }
+    return render(request, 'accounts/likes.html', context=context)

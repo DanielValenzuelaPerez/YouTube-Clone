@@ -35,8 +35,8 @@ YouTube - {{ user }}'s Channel
             {% endif %}
         {% endif %}
     </form>
-    <h3>Videos</h3>
 {% endif %}
+<h3>Videos</h3>
 {% if videos %}
     {% for video in videos %}
         <p><a href="{% url 'video' id=video.id %}">{{ video.name }}</a></p>
@@ -44,4 +44,6 @@ YouTube - {{ user }}'s Channel
 {% else %}
     <p>This channel does't have content yet.</p>
 {% endif %}
+<h3>Checkout my liked videos</h3>
+<p><a href="{% url 'likes' username=user %}">Likes</a></p>
 {% endblock content %}

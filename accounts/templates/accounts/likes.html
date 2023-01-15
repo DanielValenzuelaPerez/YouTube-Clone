@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+YouTube - {{ username }}'s Likes
+{% endblock title %}
+
+{% block content %}
+<h3>{{ username }}'s Likes</h3>
+{% if videos %}
+    {% for video in videos %}
+        <p>{{ video.name }}</p>
+    {% endfor %}
+{% else %}
+    <p>This channel doesn't have likes yet</p>
+{% endif %}
+{% endblock content %}

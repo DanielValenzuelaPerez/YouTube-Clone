@@ -14,7 +14,7 @@ class Subscription(models.Model):
 
 class ContentEngagement(models.Model):
     content = models.ForeignKey('content.Content', models.CASCADE)
-    user = models.OneToOneField(User, models.CASCADE)
+    user = models.ForeignKey(User, models.CASCADE)
     liked = models.BooleanField(null=True, blank=True)
     
     class Meta:
