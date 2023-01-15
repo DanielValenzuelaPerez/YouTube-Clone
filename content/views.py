@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 
 from accounts.models import Creator
-from content.forms import ContentForm
-from content.models import Content
+from content.forms import ContentForm, PlaylistForm
+from content.models import Content, PlaylistContent
 from engagement.models import ContentEngagement, ContentComment
 from engagement.forms import ContentCommentForm
 
@@ -47,6 +47,7 @@ def video(request, id):
     form = ContentCommentForm()
     context = {
         'form': form,
+        'playlist_form': PlaylistForm(),
         'video': video,
         'channel': user.username
     }
@@ -122,3 +123,33 @@ def dislike(request, id):
             'channel': channel
         }
         return redirect(f"/content/video/{id}", context)
+
+def create_playlist(request, id):
+    try:
+        video = Content.objects.get(id=id)
+    except Content.DoesNotExist:
+        messages.error(request, f"Video doesn't exist.")
+        return redirect(request, 'home')
+    creator = Creator.objects.get(id=video.creator.id)
+    creator_user = User.objects.get(id=creator.user.id)
+    context = {
+        'form': ContentCommentForm(),
+        'playlist_form': PlaylistForm(),
+        'video': video,
+        'channel': creator_user.username
+    }
+    if request.method == 'POST':
+        form = PlaylistForm(request.POST)
+        if form.is_valid():
+            playlist = form.save(commit=False)
+            user = User.objects.get(id=request.user.id)
+            playlist.user = user
+            playlist.save()
+            print(playlist)
+            playlist_content = PlaylistContent(playlist=playlist, content=video)
+            playlist_content.save()
+            print(playlist_content)
+    return render(request, 'content/video.html', context)
+    
+
+

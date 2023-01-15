@@ -19,6 +19,12 @@ YouTube - {{ video.name }}
     <button type="submit">Disike</button>
 </form>
 <p><a href="{% url 'channel' username=channel %}">{{ channel }}</a></p>
+<h3>Add to Playlist</h3>
+<form action={% url 'create_playlist' id=video.id %} method="post">
+    {% csrf_token %}
+    {{ playlist_form.as_p }}
+    <button type="submit">Create new playlist</button>
+</form>
 <h4>Comments</h4>
 {% for comment in video.get_comments %}
     <p>{{ comment.user }}:<br>
